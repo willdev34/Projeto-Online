@@ -1,0 +1,85 @@
+*&---------------------------------------------------------------------*
+*& Include          ZONLINE1_O01
+*&---------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*& Module STATUS_0100 OUTPUT
+*&---------------------------------------------------------------------*
+*& Status 0100
+*&---------------------------------------------------------------------*
+module status_0100 output.
+ SET PF-STATUS 'STAT_0100'.
+ SET TITLEBAR 'TIT_0100'.
+endmodule.
+*&---------------------------------------------------------------------*
+*& Module STATUS_0200 OUTPUT
+*&---------------------------------------------------------------------*
+*&  Status 0200
+*&---------------------------------------------------------------------*
+module status_0200 output.
+ SET PF-STATUS 'STAT_0200'.
+
+ IF vg_achou = abap_true.
+   SET TITLEBAR 'TIT_0200_A'.
+ ELSE.
+   SET TITLEBAR 'TIT_0200_I'.
+ENDIF.
+
+endmodule.
+
+*&---------------------------------------------------------------------*
+*& Module STATUS_0300 OUTPUT
+*&---------------------------------------------------------------------*
+*& Status 0300
+*&---------------------------------------------------------------------*
+module status_0300 output.
+ SET PF-STATUS 'STAT_0300'.
+ SET TITLEBAR 'TIT_0300'.
+endmodule.
+*&---------------------------------------------------------------------*
+*&    Module AJUSTA_TELA OUTPUT
+*&---------------------------------------------------------------------*
+*&   Ajusta tela 0200
+*&---------------------------------------------------------------------*
+module ajusta_tela output.
+
+LOOP AT SCREEN. "Vai passar por toda tela
+
+  IF screen-name = 'ZFUNC1-CODFUNC'.
+
+     IF vg_achou = abap_true.
+       SCREEN-INPUT = 0.
+     ELSE.
+       SCREEN-INPUT = 1.
+     ENDIF.
+
+  ENDIF.
+
+  MODIFY SCREEN.
+ENDLOOP.
+endmodule.
+
+*&SPWIZARD: OUTPUT MODULE FOR TC 'TC_0300'. DO NOT CHANGE THIS LINE!
+*&SPWIZARD: COPY DDIC-TABLE TO ITAB
+MODULE TC_0300_INIT OUTPUT.
+  IF G_TC_0300_COPIED IS INITIAL.
+*&SPWIZARD: COPY DDIC-TABLE 'ZFUNC1'
+*&SPWIZARD: INTO INTERNAL TABLE 'g_TC_0300_itab'
+    SELECT * FROM ZFUNC1
+       INTO CORRESPONDING FIELDS
+       OF TABLE G_TC_0300_ITAB.
+    G_TC_0300_COPIED = 'X'.
+    REFRESH CONTROL 'TC_0300' FROM SCREEN '0300'.
+  ENDIF.
+ENDMODULE.
+
+*&SPWIZARD: OUTPUT MODULE FOR TC 'TC_0300'. DO NOT CHANGE THIS LINE!
+*&SPWIZARD: MOVE ITAB TO DYNPRO
+MODULE TC_0300_MOVE OUTPUT.
+  MOVE-CORRESPONDING G_TC_0300_WA TO ZFUNC1.
+ENDMODULE.
+
+*&SPWIZARD: OUTPUT MODULE FOR TC 'TC_0300'. DO NOT CHANGE THIS LINE!
+*&SPWIZARD: GET LINES OF TABLECONTROL
+MODULE TC_0300_GET_LINES OUTPUT.
+  G_TC_0300_LINES = SY-LOOPC.
+ENDMODULE.

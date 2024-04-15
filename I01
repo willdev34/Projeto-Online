@@ -1,0 +1,92 @@
+*&---------------------------------------------------------------------*
+*& Include          ZONLINE1_I01
+*&---------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+*       a«√O DA TELA 0100
+*----------------------------------------------------------------------*
+module user_command_0100 input.
+
+  case sy-ucomm.
+    when 'BACK'.
+      leave program. "voltar para Tela Inicial
+    when 'INCLU'.
+      call screen 0200. "Chama a tela 200
+    when 'CONSU'.
+      call screen 0300. "Chama a tela 300
+    when 'CARGO'.
+      call transaction 'ZCARGO1'.
+    when 'DEPTO'.
+      call transaction 'ZDEPTO1'.
+
+  endcase.
+endmodule.
+
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0200  INPUT
+*&---------------------------------------------------------------------*
+*       AÁ„o da tela 0200
+*----------------------------------------------------------------------*
+module user_command_0200 input.
+  case sy-ucomm.
+    when 'BACK'.
+      perform limpa_tela. "Limpar a tela sempre que sair sem salvar
+      leave to screen 0100. "Volta para Tela 0100
+    when 'SAVE'.
+      perform grava_dados.
+    when 'CONSU'.
+      call screen 0300. "Chama a tela 300
+    WHEN 'NEW'.
+      PERFORM limpa_tela.
+  endcase.
+endmodule.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0300  INPUT
+*&---------------------------------------------------------------------*
+*       AÁ„o da tela 0200
+*----------------------------------------------------------------------*
+module user_command_0300 input.
+  case sy-ucomm.
+    when 'BACK'.
+      PERFORM limpa_tela.
+      leave to screen 0100. "Volta para Tela 0100
+  endcase.
+endmodule.
+*&---------------------------------------------------------------------*
+*&      Module  CARREGA_FUNC  INPUT
+*&---------------------------------------------------------------------*
+*       Carrega dados do Funcionario da tela 200
+*----------------------------------------------------------------------*
+module carrega_func input.
+
+  select single mandt
+          codfunc
+          nome
+          cargo
+          depto
+          endereco
+          bairro
+          cidade
+          uf
+          pais
+          civil
+          from zfunc1
+          into zfunc1
+          where codfunc = zfunc1-codfunc.
+
+    IF sy-subrc EQ 0.
+       vg_achou = abap_true. "essa variavel È igual a X
+    ENDIF.
+endmodule.
+
+*&SPWIZARD: INPUT MODULE FOR TC 'TC_0300'. DO NOT CHANGE THIS LINE!
+*&SPWIZARD: PROCESS USER COMMAND
+MODULE TC_0300_USER_COMMAND INPUT.
+  OK_CODE = SY-UCOMM.
+  PERFORM USER_OK_TC USING    'TC_0300'
+                              'G_TC_0300_ITAB'
+                              'FLAG'
+                     CHANGING OK_CODE.
+  SY-UCOMM = OK_CODE.
+ENDMODULE.

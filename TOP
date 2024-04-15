@@ -1,0 +1,39 @@
+*&---------------------------------------------------------------------*
+*& Include ZONLINE1_TOP                             - Module Pool      ZONLINE1
+*&---------------------------------------------------------------------*
+program zonline1.
+
+"tables: zfunc1.
+
+data vg_achou type c.
+
+***&SPWIZARD: DATA DECLARATION FOR TABLECONTROL 'TC_0300'
+*&SPWIZARD: DEFINITION OF DDIC-TABLE
+TABLES: zfunc1.
+
+*&SPWIZARD: TYPE FOR THE DATA OF TABLECONTROL 'TC_0300'
+TYPES: BEGIN OF T_TC_0300,
+         CODFUNC LIKE ZFUNC1-CODFUNC,
+         NOME LIKE ZFUNC1-NOME,
+         CARGO LIKE ZFUNC1-CARGO,
+         DEPTO LIKE ZFUNC1-DEPTO,
+         ENDERECO LIKE ZFUNC1-ENDERECO,
+         BAIRRO LIKE ZFUNC1-BAIRRO,
+         CIDADE LIKE ZFUNC1-CIDADE,
+         UF LIKE ZFUNC1-UF,
+         PAIS LIKE ZFUNC1-PAIS,
+         CIVIL LIKE ZFUNC1-CIVIL,
+       END OF T_TC_0300.
+
+*&SPWIZARD: INTERNAL TABLE FOR TABLECONTROL 'TC_0300'
+DATA:     G_TC_0300_ITAB   TYPE T_TC_0300 OCCURS 0,
+          G_TC_0300_WA     TYPE T_TC_0300. "work area
+DATA:     G_TC_0300_COPIED.           "copy flag
+
+*&SPWIZARD: DECLARATION OF TABLECONTROL 'TC_0300' ITSELF
+CONTROLS: TC_0300 TYPE TABLEVIEW USING SCREEN 0300.
+
+*&SPWIZARD: LINES OF TABLECONTROL 'TC_0300'
+DATA:     G_TC_0300_LINES  LIKE SY-LOOPC.
+
+DATA:     OK_CODE LIKE SY-UCOMM.
